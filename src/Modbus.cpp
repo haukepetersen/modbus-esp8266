@@ -315,10 +315,12 @@ void Modbus::slavePDU(uint8_t* frame) {
                 bufSize += recLen * 2 + 2;   // 4 bytes for header + data
                 recs += 7;
             }
+    #if MODBUS_MAX_FRAME < 256
             if (bufSize > MODBUS_MAX_FRAME) {  // Frame to return too large
                 exceptionResponse(fcode, EX_ILLEGAL_ADDRESS);
                 return;  
             }
+    #endif
             uint8_t* srcFrame = _frame;
             _frame = (uint8_t*)malloc(bufSize);
             if (!_frame) {
